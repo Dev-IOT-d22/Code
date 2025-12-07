@@ -171,9 +171,7 @@ def load_known_faces():
 # Face RECOGNITION
 def start_recognition():
     global attendance_sheet
-    print("\n" + "="*50)
     print("BẮT ĐẦU NHẬN DIỆN KHUÔN MẶT")
-    print("="*50 + "\n")
     if not known_face_encodings:
         load_known_faces()
     if attendance_sheet is None:
@@ -209,7 +207,7 @@ def start_recognition():
                     idx = matches.index(True)
                     name = known_face_names[idx]
                     person_id = known_face_ids.get(name, f"{idx+1:03d}")
-                    print(f"\n✅ NHẬN DIỆN THÀNH CÔNG: {name} (ID: {person_id})")
+                    print(f"\nNHẬN DIỆN THÀNH CÔNG: {name} (ID: {person_id})")
                     if unlock_door():
                         log_attendance(attendance_sheet, person_id, name, img_path)
                         recognized = True
@@ -224,9 +222,8 @@ def start_recognition():
             time.sleep(2)
     if not recognized:
         print("\n[!] Không nhận diện được sau 10 lần thử!")
-    print("\n" + "="*50)
     print("KẾT THÚC NHẬN DIỆN")
-    print("="*50 + "\n")
 
 if __name__ == "__main__":
     start_recognition()
+
