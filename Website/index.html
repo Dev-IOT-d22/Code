@@ -226,7 +226,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔐 Hệ Thống Chấm Công</h1>
+            <h1>Hệ Thống Chấm Công</h1>
             <p>ESP32-CAM Face Recognition System</p>
         </div>
 
@@ -274,11 +274,10 @@
     </div>
 
     <script>
-        // CẤU HÌNH API
-        const API_URL = 'https://hurtfully-untarred-londa.ngrok-free.dev';  // URL Flask API chạy local
-        const GOOGLE_SHEET_URL = 'YOUR_GOOGLE_SHEET_JSON_URL';  // URL để lấy data từ Google Sheets
+        // API
+        const API_URL = 'https://hurtfully-untarred-londa.ngrok-free.dev';
+        const GOOGLE_SHEET_URL = 'YOUR_GOOGLE_SHEET_JSON_URL';
 
-        // Hiển thị thông báo
         function showStatus(message, type = 'info') {
             const statusBar = document.getElementById('statusBar');
             statusBar.className = `status-bar active ${type}`;
@@ -289,11 +288,10 @@
             }, 5000);
         }
 
-        // Bắt đầu chấm công
         async function startAttendance() {
             const btn = document.getElementById('startBtn');
             btn.disabled = true;
-            btn.textContent = '⏳ Đang khởi động...';
+            btn.textContent = 'Đang khởi động...';
             
             try {
                 const response = await fetch(`${API_URL}/start`, {
@@ -306,18 +304,17 @@
                 const data = await response.json();
                 
                 if (data.success) {
-                    showStatus('✅ Hệ thống nhận diện đã khởi động! Vui lòng đứng trước camera.', 'success');
+                    showStatus('Hệ thống nhận diện đã khởi động! Vui lòng đứng trước camera.', 'success');
                     document.getElementById('systemStatus').textContent = 'Đang nhận diện...';
                     
-                    // Tự động tải lại sau 3 giây
                     setTimeout(() => {
                         loadAttendance();
                     }, 3000);
                 } else {
-                    showStatus('❌ Lỗi: ' + data.message, 'error');
+                    showStatus('Lỗi: ' + data.message, 'error');
                 }
             } catch (error) {
-                showStatus('❌ Không thể kết nối đến server Python. Hãy đảm bảo Flask API đang chạy!', 'error');
+                showStatus('Không thể kết nối đến server Python. Hãy đảm bảo Flask API đang chạy!', 'error');
                 console.error(error);
             } finally {
                 btn.disabled = false;
@@ -325,7 +322,6 @@
             }
         }
 
-        // Tải dữ liệu chấm công từ Google Sheets
         async function loadAttendance() {
             const loading = document.getElementById('loading');
             const table = document.getElementById('attendanceTable');
@@ -333,7 +329,6 @@
             loading.classList.add('active');
             
             try {
-                // Gọi API để lấy dữ liệu
                 const response = await fetch(`${API_URL}/attendance`);
                 const data = await response.json();
                 
@@ -359,18 +354,17 @@
                 }
             } catch (error) {
                 console.error('Lỗi tải dữ liệu:', error);
-                showStatus('❌ Không thể tải dữ liệu từ server', 'error');
+                showStatus('Không thể tải dữ liệu từ server', 'error');
             } finally {
                 loading.classList.remove('active');
             }
         }
 
-        // Tự động tải dữ liệu khi vào trang
         window.onload = () => {
             loadAttendance();
-            // Tự động refresh mỗi 30 giây
             setInterval(loadAttendance, 30000);
         };
     </script>
 </body>
+
 </html>
