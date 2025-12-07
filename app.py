@@ -15,7 +15,6 @@ CREDENTIALS_FILE = 'iot-nhom6.json'
 SHEET_NAME = 'iot-chamcongtudong'
 WORKSHEET_NAME = 'DANHSACH'
 
-# Biến toàn cục
 face_recognition_running = False
 attendance_sheet = None
 
@@ -33,20 +32,12 @@ def connect_google_sheet():
         return None
 
 def run_face_recognition():
-    """
-    Import và chạy code nhận diện khuôn mặt
-    """
     global face_recognition_running
     face_recognition_running = True
-    
     try:
-        # Import động để tránh lỗi khi khởi động
         sys.path.append(os.path.dirname(os.path.abspath(__file__)))
         import face_recognition_main
-        
-        # Gọi hàm nhận diện
-        face_recognition_main.start_recognition()
-        
+        face_recognition_main.start_recognition() 
     except Exception as e:
         print(f"[!] Lỗi chạy face recognition: {e}")
     finally:
@@ -75,7 +66,6 @@ def start_recognition():
             "message": "Hệ thống nhận diện đang chạy rồi!"
         })
     
-    # Chạy face recognition trong thread riêng
     thread = threading.Thread(target=run_face_recognition)
     thread.daemon = True
     thread.start()
@@ -99,7 +89,6 @@ def get_attendance():
                 "message": "Không thể kết nối Google Sheets"
             })
         
-        # Lấy tất cả dữ liệu
         all_values = attendance_sheet.get_all_values()
         
         if len(all_values) <= 1:
@@ -108,9 +97,8 @@ def get_attendance():
                 "records": []
             })
         
-        # Chuyển đổi thành dict
         records = []
-        for row in all_values[1:]:  # Bỏ header
+        for row in all_values[1:]: 
             if len(row) >= 5:
                 records.append({
                     "id": row[0],
@@ -120,7 +108,6 @@ def get_attendance():
                     "status": row[4]
                 })
         
-        # Đảo ngược để hiển thị mới nhất trước
         records.reverse()
         
         return jsonify({
@@ -145,15 +132,11 @@ def get_status():
     })
 
 if __name__ == '__main__':
-    print("=" * 50)
     print("ESP32-CAM ATTENDANCE SYSTEM - FLASK API")
-    print("=" * 50)
-    
-    # Kết nối Google Sheets ngay từ đầu
     attendance_sheet = connect_google_sheet()
     
-    print("\n[*] Starting Flask API Server...")
+    print("\n[*] Flask API Server")
     print("[*] API sẽ chạy tại: http://localhost:5000")
-    print("[*] Nhấn Ctrl+C để dừng server\n")
     
-    app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=False)  # ← Tắt reloader để tránh lỗi
+    app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=False)
+
